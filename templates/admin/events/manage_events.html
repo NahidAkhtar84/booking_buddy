@@ -1,0 +1,152 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Manage Events | Admin</title>
+{% endblock %}
+
+{% block css %}
+    <link href="{% static 'admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'admin/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'admin/js/demo/datatables-demo.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                Swal.fire(
+                  'Success!',
+                  '{{ message }}',
+                  'success'
+                )
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="card shadow card border-left-success shadow h-100 py-2 mb-4">
+            <div class="card-header py-3">
+                <div>
+                    <h5 class="m-0 font-weight-bold text-primary">Event Requests</h5>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Sl.</th>
+                            <th>Event Title</th>
+                            <th>Owner</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th style="width: 300px !important;">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for event in events %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ event.name }}</td>
+                                <td>{{ event.username }}</td>
+                                <td>{{ event.phone }}</td>
+                                <td>
+                                {% if event.status == 'pending' %}
+                                    <span class="badge badge-warning">Pending</span>
+                                {% elif event.status == 'accepted' %}
+                                    <span class="badge badge-success">Accepted</span>
+                                {% elif event.status == 'rejected' %}
+                                    <span class="badge badge-danger">Rejected</span>
+                                {% endif %}
+                                </td>
+
+                                <td>
+                                    <a href="#" class="btn btn-info btn-sm" data-toggle="modal"
+                                       data-target="#exampleModal{{ event.id }}">
+                                        <span class="text">Details</span>
+                                    </a>
+                                    <a href="{% url 'edit-event' event.id %}" class="btn btn-warning btn-sm">
+                                        <span class="text">Edit</span>
+                                    </a>
+                                    {% if event.status == 'pending' %}
+                                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                            <div class="btn-group" role="group">
+                                                <button id="btnGroupDrop1" type="button"
+                                                        class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                    Choose
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                    <a class="dropdown-item" href="{% url 'accept' event.id %}">Accept</a>
+                                                    <a class="dropdown-item" href="#" data-toggle="modal"
+                                                            data-target="#DeleteModal{{ event.id }}">Reject & Delete</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% else %}
+                                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal"
+                                            data-target="#DeleteModal{{ event.id }}">
+                                            <span class="text">Delete</span>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <div class="modal fade" id="exampleModal{{ event.id }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">
+                                                    Details of {{ event.name }} by {{ event.username }}
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6 style="font-weight: bold">Phone</h6><p> {{ event.phone }}</p>
+                                                <h6 style="font-weight: bold">Email </h6><p> {{ event.email }}</p>
+                                                <h6 style="font-weight: bold">Start Date </h6><p> {{ event.start }}</p>
+                                                <h6 style="font-weight: bold">End Date </h6><p> {{ event.end }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary btn-sm"
+                                                        data-dismiss="modal">Close
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="DeleteModal{{ event.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">You won't be able to revert this!</div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-danger" href="{% url 'reject' event.id %}">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

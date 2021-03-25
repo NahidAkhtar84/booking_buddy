@@ -1,0 +1,144 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Address | Admin</title>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                Swal.fire(
+                  'Success!',
+                  '{{ message }}',
+                  'success'
+                )
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid col-md-10">
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        </div>
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Title
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.title }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-search-location fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Title Description
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.title_desc }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-location-arrow fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Address Title
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.address_title }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-road fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Address
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.address }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-house-user fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Contact
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.phone }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-phone fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-5 col-md-6 mb-5">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Email
+                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ address.email }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-envelope-open-text fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <a href="{% url 'edit-address' address.id %}" class="btn btn-warning btn-icon-split btn-lg">
+                <span class="icon text-white-50">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </span>
+                <span class="text">Edit</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

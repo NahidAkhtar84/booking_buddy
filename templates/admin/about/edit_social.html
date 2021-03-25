@@ -1,0 +1,46 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Social Links | Admin</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-10" style="width: 1060px;">
+                <div class="card shadow card border-left-primary shadow h-100 py-2 mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h5 class="m-0 font-weight-bold text-primary">Edit Links</h5>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Name</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="name" placeholder="Facebook/Youtube etc."
+                                           value="{{ info.name }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Link</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="link" placeholder="https://www...."
+                                           value="{{ info.link }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

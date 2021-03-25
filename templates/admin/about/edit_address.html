@@ -1,0 +1,75 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Edit Address | Admin</title>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-10" style="width: 1060px;">
+                <div class="card shadow card border-left-success shadow h-100 py-2 mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Information</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Title</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="title"
+                                           value="{{ add.title }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Title Description</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="title_desc"
+                                           value="{{ add.title_desc }}" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Address Title</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="address_title"
+                                           value="{{ add.address_title }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Phone</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="phone"
+                                           value="{{ add.phone }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="email" name="email"
+                                           value="{{ add.email }}" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="details" rows="5">{{ add.address }}</textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

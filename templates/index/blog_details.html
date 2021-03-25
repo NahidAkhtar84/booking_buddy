@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Manup Template">
+    <meta name="keywords" content="Manup, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Details | {{ details.title }}</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500,600,700,800,900&amp;display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&amp;display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+</head>
+<body>
+
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+{% include 'common/header.html' %}
+
+<section class="blog-hero-section set-bg" data-setbg="{{ details.images.url }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="bh-text">
+                    <h2>{{ details.title }}</h2>
+                    <ul>
+                        <li>{{ details.date }}</li>
+                        <li>{{ details.category }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="blog-details-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 m-auto" style="width: 760px;">
+                <div class="container bd-text" style="width: 750px !important;">
+                    {{ details.details | safe }}
+                    <div class="bd-tag-share">
+                        <div class="tag">
+                            <a>{{ details.category }}</a>
+                            <a href="{% url 'likeinc' details.slug %}">{{ details.likes }} <i class="fa fa-thumbs-up"></i></a>
+                        </div>
+                        <div class="s-share">
+                            <span>Share:</span>
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-google-plus"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                {% if details.comment_set.all %}
+                <div class="ps-comments">
+                    <br>
+                    <h3><b>Comment</b></h3>
+                    {% for c in details.comment_set.all %}
+                    <div class="st-content" style="margin-top: 20px;">
+                      <div class="container">
+                        <header>
+                            <h6><strong>{{ c.name }} </strong><span> -{{ c.date_added }}</span></h6>
+                        </header>
+                        <p>{{ c.message }}</p>
+                      </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<div class="comment-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h3>Leave A Comment</h3>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 m-auto">
+                <form action="/lcomment", method="post" class="comment-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="bid" value="{{details.slug}}">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <input type="text" name="name" placeholder="Name">
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" name="email" placeholder="Email">
+                        </div>
+                        <div class="col-lg-4">
+                            <input type="text" name="phone" placeholder="Phone">
+                        </div>
+                        <div class="col-lg-12 text-center">
+                            <textarea name="message" placeholder="Messages"></textarea>
+                            <button type="submit" class="site-btn">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if related %}
+    <section class="related-post-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Related Post</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                {% for rel in related %}
+                    <div class="blog-item set-bg" data-setbg="{{ rel.images.url }}">
+                        <div class="bi-tag bg-gradient">{{ rel.category }}</div>
+                        <div class="bi-text">
+                            <h5><a href="{% url 'details' rel.slug %}">{{ rel.title }}</a></h5>
+                            <span><i class="fa fa-clock-o"></i> {{ rel.date }}</span> <br><br>
+                            <div class="newslatter-inner set-bg">
+                                <div class="ni-form">
+                                    <a href="{% url 'details' rel.slug %}">
+                                        <button>Read More</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+{% include 'common/footer.html' %}
+
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+<script src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
+</script>
+</body>
+
+<!-- Mirrored from preview.colorlib.com/theme/manup/blog-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 09 Mar 2021 16:34:00 GMT -->
+</html>

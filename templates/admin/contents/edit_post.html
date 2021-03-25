@@ -1,0 +1,71 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Edit Post | Admin</title>
+{% endblock %}
+
+{% block css %}
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+{% endblock %}
+
+{% block js %}
+    <script>
+        CKEDITOR.replace( 'details' );
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-10" style="width: 1060px;">
+                <div class="card shadow card border-left-success shadow h-100 py-2 mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Post</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.media }}
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Title</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="title"
+                                           value="{{ post.title }}" placeholder="Post Title Goes Here" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Category</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="category"
+                                           value="{{ post.category }}" placeholder="Category" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Image</label>
+                                <input type="hidden" name="current_image" value="{{ post.images }}">
+                                    <div class="col-sm-10 input-group">
+                                        <input class="form-control" name="image" type="file" id="formFile">
+                                        <img src="{{ post.images.url }}" style="width: 80px; height: 80px;">
+                                    </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Details</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="details" rows="3">{{ post.details }}</textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary mb-3">Publish</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

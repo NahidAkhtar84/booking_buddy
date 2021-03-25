@@ -1,0 +1,16 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block title %} <title>Home | Event Management</title> {% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="text-center">
+        <br>
+        <h1><i>{{ aboutus.title }}</i></h1>
+        <br>
+        <img src="{{ aboutus.image.url }}">
+        {{ aboutus.description|safe }}
+    </div>
+</div>
+
+{% endblock %}

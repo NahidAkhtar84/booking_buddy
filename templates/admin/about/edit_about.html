@@ -1,0 +1,107 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Edit Post | Admin</title>
+{% endblock %}
+
+{% block css %}
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <link href="{% static 'admin/lity/dist/lity.css' %}" rel="stylesheet">
+    <link href="{% static 'admin/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'admin/lity/vendor/jquery.js' %}"></script>
+    <script src="{% static 'admin/lity/dist/lity.js' %}"></script>
+    <script>
+        CKEDITOR.replace( 'details' );
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-10" style="width: 1060px;">
+                <div class="card shadow card border-left-success shadow h-100 py-2 mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Information</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Title</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="title"
+                                           value="{{ about.title }}" placeholder="Post Title Goes Here" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Mobile no.</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="mobile"
+                                           value="{{ about.mobile }}" placeholder="For Receiving SMS" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Image</label>
+                                <input type="hidden" name="current_image" value="{{ about.image }}">
+                                    <div class="col-sm-10 input-group">
+                                        <input class="form-control" name="image" type="file" id="formFile">
+                                        <img src="{{ about.image.url }}" style="width: 50px; height: 50px;" data-lity>
+                                    </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Description</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" name="details" rows="3">{{ about.description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Area Chart -->
+            <div class="col-xl-12 col-lg-10" style="width: 1060px;">
+                <div class="card shadow card border-left-success shadow h-100 py-2 mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Information</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <form action="{% url 'edit-cpy' cpy.id %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3 row">
+                                <label for="staticEmail" class="col-sm-2 col-form-label">Copyright Info</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="cpy"
+                                           value="{{ cpy.copyright }}" placeholder="Copyright Information" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary mb-3">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Event Booking</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <!-- Date Time Picker CSS -->
+    <link rel="stylesheet" href="{% static 'date-time-phone/jquery-ui.css' %}">
+    <link rel='stylesheet' href="{% static 'date-time-phone/jquery-ui-timepicker-addon.css' %}"/>
+    <!-- Date Time Picker CSS -->
+
+</head>
+<body>
+
+<div class="p-4 m-4">
+    <div class="col-lg-5 mx-auto border rounded p-4 m-4">
+        <h3 class="alert alert-info">Apply for booking</h3>
+        <form action="/booking" method="POST">
+            {% csrf_token %}
+
+            <!-- Error Message show -->
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <!-- Event Name -->
+            <div class="mb-3">
+                <label for="eventname" class="form-label">Event Name</label>
+                <input value="" type="text" class="form-control" id="eventname" name="eventname">
+            </div>
+
+            <!-- User Name -->
+            <div class="mb-3">
+                <label for="username" class="form-label">Your Full Name</label>
+                <input value="" type="text" class="form-control" id="username" name="username">
+            </div>
+
+            <!-- Phone Number -->
+            <div class="mb-3">
+                <label for="mobilenumber" class="form-label">Phone Number</label>
+                <input type="text" class="form-control" id="mobilenumber" name="mobilenumber"
+                       placeholder="Please Enter Your Active Phone Number">
+            </div>
+
+            <!-- Email address -->
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email">
+            </div>
+
+            <div class="mb-3">
+                <label for="id_birth_date" class="form-label">Start Date</label>
+                <input type="text" id="id_birth_date" class="form-control" name="startdate">
+            </div>
+
+            <div class="mb-3">
+                <label for="end_date" for="id_birth_date" class="form-label">End Date</label>
+                <input type="text" class="form-control" id="end_date" name="enddate">
+            </div>
+
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-info">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Date Time Picker JS -->
+<script src="{% static 'date-time-phone/jquery-ui.js' %}"></script>
+<script src="{% static 'date-time-phone/jquery-ui-timepicker-addon.js' %}"></script>
+
+<script>
+    $(function () {
+        $("#id_birth_date").datetimepicker({dateFormat: 'yy-mm-dd', controlType: 'select'}).attr("autocomplete", "off");
+        // $( "#id_birth_date" ).timepicker({ dateFormat: 'yy-mm-dd', maxDate: 0, controlType: 'select'}).attr("autocomplete", "off") ;
+        //$( "#id_birth_date" ).datepicker({ dateFormat: 'yy-mm-dd' }).attr("autocomplete", "off") ;
+    });
+</script>
+
+<script>
+    $(function () {
+        $("#end_date").datetimepicker({dateFormat: 'yy-mm-dd', controlType: 'select'}).attr("autocomplete", "off");
+
+    });
+</script>
+
+</body>
+</html>

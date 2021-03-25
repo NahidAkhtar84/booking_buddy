@@ -1,0 +1,330 @@
+{% extends 'admin/common/base.html' %}
+{% load static %}
+{% block title %}
+    <title>Dashboard | Admin</title>
+{% endblock %}
+
+{% block calendar %}
+    <script>
+        $(document).ready(function () {
+            var calendar = $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: [
+                    {% for event in events %}
+                        {
+                            title: "{{ event.name }}",
+                            start: '{{ event.start|date:"Y-m-d" }}',
+                            end: '{{ event.end|date:"Y-m-d" }}'+' 20:00:00',
+                            id: '{{ event.id }}',
+                            color: '{{ event.color }}',
+                            textColor: '{{ event.textcolor }}',
+
+                        },
+                    {% endfor %}
+                ],
+
+                selectable: true,
+                selectHelper: true,
+                editable: true,
+                eventLimit: true,
+                select: function (start, end, allDay) {
+                    var title = prompt("Enter Event Title");
+                    if (title) {
+                        var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                        var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+
+                        $.ajax({
+                            type: "GET",
+                            url: '/add_event',
+                            data: {'title': title, 'start': start, 'end': end},
+                            dataType: "json",
+                            success: function (data) {
+                                calendar.fullCalendar('refetchEvents');
+                                alert("Added Successfully");
+                            },
+                            failure: function (data) {
+                                alert('There is a problem!!!');
+                            }
+                        });
+                    }
+                },
+
+                eventResize: function (event) {
+                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    var title = event.title;
+                    var id = event.id;
+                    $.ajax({
+                        type: "GET",
+                        url: '/update',
+                        data: {'title': title, 'start': start, 'end': end, 'id': id},
+                        dataType: "json",
+                        success: function (data) {
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Event Update');
+                        },
+                        failure: function (data) {
+                            alert('There is a problem!!!');
+                        }
+                    });
+                },
+
+                eventDrop: function (event) {
+                    var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+                    var title = event.title;
+                    var id = event.id;
+                    $.ajax({
+                        type: "GET",
+                        url: '/update',
+                        data: {'title': title, 'start': start, 'end': end, 'id': id},
+                        dataType: "json",
+                        success: function (data) {
+                            calendar.fullCalendar('refetchEvents');
+                            alert('Event Update');
+                        },
+                        failure: function (data) {
+                            alert('There is a problem!!!');
+                        }
+                    });
+                },
+
+            });
+        });
+
+    </script>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'admin/vendor/chart.js/Chart.min.js' %}"></script>
+    <script src="{% static 'admin/js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'admin/js/demo/chart-pie-demo.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    </div>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Completed</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_events}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pending Requests Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Booked (Last Month)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{last_month_events}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-minus fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Booked (This month)
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{current_month_events}}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Growth</div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{growth}}%</div>
+                                </div>
+                                <div class="col">
+                                    <div class="progress progress-sm mr-2">
+                                        <div class="progress-bar bg-info" role="progressbar"
+                                             style="width: {{growth}}%" aria-valuenow="" aria-valuemin="0"
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                            <!--                                fas fa-clipboard-list -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="row">
+        <!-- Area Chart -->
+        <div class="col-xl-12 col-lg-10">
+            <div class="card shadow mb-4">
+                <!--                   Card Header - Dropdown-->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Event Calendar</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in">
+                            <div class="dropdown-header">Dropdown Header:</div>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <!-- Area Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Monthly Event Booking Statistics</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="linechart"></canvas>
+                        <script>
+                        var ctx = document.getElementById('linechart').getContext('2d');
+                        var myChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec' ],
+                                datasets: [{
+                                    label: 'Monthly Booked Events',
+                                    data: {{data}},
+                                    backgroundColor: ['red', '#29DEBF', '#29DE29', '#E73C77', '#514DDC', '#EFF92D','#2B971C', '#33E8DB', '#201F1F', '#AC2AB9', '#34495E', '#F55C1F'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Accepted Vs Pending Events</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                             aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Dropdown Header:</div>
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="pie-chart" aria-label="chart" height="300" , width="500" role="img"></canvas>
+                        <script>
+                            var ctx = document.getElementById('pie-chart').getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Pending', 'Accepted'],
+                                    datasets: [{
+                                        label: '# of Votes',
+                                        data: [{{pending_events}}, {{accepted_events}}],
+                                        backgroundColor: ['red', 'green'],
+
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }]
+                                    }
+                                }
+                            });
+
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
